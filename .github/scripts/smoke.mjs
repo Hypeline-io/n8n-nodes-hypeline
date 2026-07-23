@@ -45,9 +45,12 @@ function assert(cond, message) {
 	}
 }
 
-const created = await api('POST', '/v1/sources', { url: 'https://example.com/' });
+// POST /v1/sources takes the batch envelope { sources: [ { url } ] } and returns
+// { results: [ { status, detected_type, source } ] }; a flat single-source body is
+// rejected 422. This mirrors the shape the node's Create Source operation sends.
+const created = await api('POST', '/v1/sources', { sources: [{ url: 'https://example.com/' }] });
 assert(created.status >= 200 && created.status < 300, `create source returned ${created.status}`);
-const id = created.body?.id;
+const id = created.body?.results?.[0]?.source?.id;
 assert(typeof id === 'string' && id.length > 0, 'created source has no id');
 
 const list = await api('GET', '/v1/sources');

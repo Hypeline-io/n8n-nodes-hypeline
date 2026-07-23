@@ -1,4 +1,31 @@
-import { NodeConnectionTypes, type INodeType, type INodeTypeDescription } from 'n8n-workflow';
+import {
+	NodeConnectionTypes,
+	type IDataObject,
+	type IExecuteSingleFunctions,
+	type IHttpRequestOptions,
+	type INodeType,
+	type INodeTypeDescription,
+} from 'n8n-workflow';
+
+// POST /v1/sources takes a batch envelope ({ sources: [ { url, ... } ] }) and
+// returns { results: [ { status, detected_type, source } ] }; a flat single-source
+// body is rejected 422. The node collects the create fields flat, so this preSend
+// wraps them into the one-item batch and splits the comma-separated tags string
+// into the array the API requires.
+export async function wrapCreateSourceBody(
+	this: IExecuteSingleFunctions,
+	requestOptions: IHttpRequestOptions,
+): Promise<IHttpRequestOptions> {
+	const item = (requestOptions.body ?? {}) as IDataObject;
+	if (typeof item.tags === 'string') {
+		item.tags = item.tags
+			.split(',')
+			.map((tag) => tag.trim())
+			.filter((tag) => tag.length > 0);
+	}
+	requestOptions.body = { sources: [item] };
+	return requestOptions;
+}
 
 export class Hypeline implements INodeType {
 	description: INodeTypeDescription = {
@@ -73,6 +100,14 @@ export class Hypeline implements INodeType {
 								method: 'POST',
 								url: '/v1/sources',
 							},
+							output: {
+								postReceive: [
+									{
+										type: 'rootProperty',
+										properties: { property: 'results' },
+									},
+								],
+							},
 						},
 					},
 					{
@@ -132,6 +167,7 @@ export class Hypeline implements INodeType {
 					send: {
 						type: 'body',
 						property: 'url',
+						preSend: [wrapCreateSourceBody],
 					},
 				},
 			},

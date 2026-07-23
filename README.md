@@ -83,7 +83,7 @@ Requires n8n with `n8nNodesApiVersion` 1. Tested against current n8n releases.
 
 ## Resources
 
-- [Hypeline documentation](https://hypeline.io/docs)
+- [Hypeline documentation](https://docs.hypeline.io)
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
 
 ## License

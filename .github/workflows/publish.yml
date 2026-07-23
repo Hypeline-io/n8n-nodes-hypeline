@@ -6,7 +6,8 @@
 # the entire release ritual.
 #
 # Auth is npm OIDC trusted publishing (id-token: write, no secret in this repo).
-# Provenance is attached automatically (publishConfig.provenance in package.json).
+# Provenance is attached by the --provenance flag in the publish step below (which
+# only works in CI, where the OIDC provider exists; a local `npm publish` omits it).
 #
 # ONE-TIME SETUP on npmjs.com (same as the SDK):
 #   1. First publish creates the package (see "first publish" in CLAUDE.md);
@@ -59,4 +60,4 @@ jobs:
         run: |
           npm ci
           npm run build
-          npm publish
+          npm publish --provenance

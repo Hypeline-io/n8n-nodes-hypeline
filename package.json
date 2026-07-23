@@ -2,8 +2,7 @@
   "name": "@hypeline-io/n8n-nodes-hypeline",
   "version": "0.1.0",
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "description": "Give your agents and workflows eyes on the web. Watch any feed, streaming source, or page and act on genuinely new content in n8n.",
   "license": "MIT",
@@ -48,7 +47,7 @@
     ]
   },
   "devDependencies": {
-    "@n8n/node-cli": "*",
+    "@n8n/node-cli": "0.40.3",
     "@types/node": "^22",
     "eslint": "9.32.0",
     "prettier": "3.6.2",

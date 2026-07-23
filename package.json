@@ -1,0 +1,58 @@
+{
+  "name": "n8n-nodes-hypeline",
+  "version": "0.1.0",
+  "description": "Give your agents and workflows eyes on the web. Watch any feed, streaming source, or page and act on genuinely new content in n8n.",
+  "license": "MIT",
+  "homepage": "https://hypeline.io",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "hypeline",
+    "monitoring",
+    "change-detection",
+    "webhook"
+  ],
+  "author": {
+    "name": "Hypeline",
+    "email": "hello@hypeline.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hypeline-io/n8n-nodes-hypeline.git"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "test": "npm run build && node --test \"test/**/*.test.js\"",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/HypelineApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Hypeline/Hypeline.node.js",
+      "dist/nodes/HypelineTrigger/HypelineTrigger.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "*",
+    "@types/node": "^22",
+    "eslint": "9.32.0",
+    "prettier": "3.6.2",
+    "release-it": "^19.0.4",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}

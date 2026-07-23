@@ -1,0 +1,41 @@
+# Daily smoke check against the live Hypeline API.
+#
+# The node depends on the shapes of a few public endpoints (create a source,
+# list it, delete it). This scheduled job exercises them so a breaking API
+# change is caught here rather than by a user's workflow.
+#
+# It is a no-op until the HYPELINE_SMOKE_TOKEN repo secret (a test hype_ key) is
+# set, so the workflow is safe to commit before the secret is provisioned.
+# Set it under Settings -> Secrets and variables -> Actions.
+
+name: Smoke
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  smoke:
+    name: Live API smoke check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Smoke the live API
+        env:
+          HYPELINE_SMOKE_TOKEN: ${{ secrets.HYPELINE_SMOKE_TOKEN }}
+        run: node .github/scripts/smoke.mjs

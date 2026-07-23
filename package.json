@@ -1,6 +1,10 @@
 {
-  "name": "n8n-nodes-hypeline",
+  "name": "@hypeline-io/n8n-nodes-hypeline",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "description": "Give your agents and workflows eyes on the web. Watch any feed, streaming source, or page and act on genuinely new content in n8n.",
   "license": "MIT",
   "homepage": "https://hypeline.io",
@@ -27,7 +31,6 @@
     "lint": "n8n-node lint",
     "lint:fix": "n8n-node lint --fix",
     "test": "npm run build && node --test \"test/**/*.test.js\"",
-    "release": "n8n-node release",
     "prepublishOnly": "n8n-node prerelease"
   },
   "files": [

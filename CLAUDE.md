@@ -1,4 +1,4 @@
-# CLAUDE.md, n8n-nodes-hypeline
+# CLAUDE.md, @hypeline-io/n8n-nodes-hypeline
 
 Guidance for Claude Code and other agents working in this repository.
 
@@ -8,7 +8,8 @@ specific to this project. Follow it exactly; it encodes the n8n verification bar
 
 ## What this is
 
-`n8n-nodes-hypeline` is the official [Hypeline](https://hypeline.io) community
+`@hypeline-io/n8n-nodes-hypeline` (repo `Hypeline-io/n8n-nodes-hypeline`) is the
+official [Hypeline](https://hypeline.io) community
 node for [n8n](https://n8n.io). It gives a workflow (or an AI agent driving n8n)
 eyes on the web: watch any feed, streaming source, or web page, and act on
 genuinely new content.
@@ -103,12 +104,24 @@ cloud-support mode). It enforces, among others:
 - A change is not done until: lint clean, `npm test` green, the build produces a
   clean tarball, and, when behavior or the public surface changed, **the version
   is bumped (semver) and `CHANGELOG.md` has an entry in the same change.**
-- Release with `npm run release` (interactive: lint, build, version bump,
-  changelog, commit, tag, push). The tag push triggers
-  `.github/workflows/publish.yml`, which publishes to npm with a signed
-  **provenance** attestation (`id-token: write` + OIDC Trusted Publishing).
-  Since 2026-05-01 n8n requires community nodes to publish this way; never
-  `npm publish` from a laptop.
+- **Releases are driven by the version in `package.json`, no git tags** (same
+  mechanism as the Hypeline SDK, `@hypeline-io/sdk`). To release: bump the
+  `version` (and update `CHANGELOG.md`), commit, and push to `main`.
+  `.github/workflows/publish.yml` then publishes to npm ONLY if that exact
+  version is not already there, so a docs-only push never re-publishes. A version
+  bump is the entire release ritual.
+- Auth is **npm OIDC trusted publishing** (`id-token: write`, no token, no secret
+  in the repo). **Provenance is attached automatically** via
+  `publishConfig.provenance` in `package.json`, which satisfies n8n's
+  post-2026-05-01 provenance requirement. Never `npm publish` a release from a
+  laptop; let CI do it.
+- **First publish (one-time bootstrap).** npm trusted publishing cannot attach to
+  a package name that does not exist yet. Create `@hypeline-io/n8n-nodes-hypeline`
+  once: `npm login` (an `@hypeline-io` org member) then `npm publish` from a clean
+  build, or use a temporary granular automation token for a single CI run. Then on
+  npmjs.com add the Trusted Publisher (repo `Hypeline-io/n8n-nodes-hypeline`,
+  workflow `publish.yml`). Every later version bump publishes via OIDC with no
+  token. This is how `@hypeline-io/sdk` was bootstrapped.
 
 ## Keep in sync with the Hypeline API
 

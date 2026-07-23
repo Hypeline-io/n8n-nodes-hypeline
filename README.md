@@ -44,7 +44,9 @@ Manages monitoring from inside a workflow, with three resources:
 - **Source**: create, get, list, delete. A source turns any feed, streaming
   source, or web page into an event stream. The tier is detected automatically.
 - **Alert**: create, list, update, delete. An alert is a keyword or Boolean
-  query matched against the content of changes from a set of sources.
+  query matched against the content of changes from a set of sources. Set an
+  optional **Name** to give the alert a human-friendly label; leave it blank to
+  fall back to the derived scope-and-filter sentence.
 - **Destination**: create, list, update, delete. A delivery target attached
   under an alert (webhook, Slack, Discord, Telegram, or ntfy).
 

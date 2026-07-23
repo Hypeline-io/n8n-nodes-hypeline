@@ -431,6 +431,20 @@ export class Hypeline implements INodeType {
 						},
 					},
 					{
+						displayName: 'Name',
+						name: 'name',
+						type: 'string',
+						default: '',
+						description:
+							'Optional human-friendly alert name; blank falls back to the derived scope+filter sentence',
+						routing: {
+							send: {
+								type: 'body',
+								property: 'name',
+							},
+						},
+					},
+					{
 						displayName: 'Source IDs',
 						name: 'source_ids',
 						type: 'string',

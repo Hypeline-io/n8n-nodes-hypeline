@@ -1,4 +1,4 @@
-# n8n-nodes-hypeline
+# @hypeline-io/n8n-nodes-hypeline
 
 Give your agents and workflows eyes on the web. This is an [n8n](https://n8n.io)
 community node for [Hypeline](https://hypeline.io): point it at any feed,
@@ -22,7 +22,7 @@ lives in can watch the web.
 
 Follow the [community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/):
 in n8n, go to **Settings > Community Nodes**, select **Install**, and enter
-`n8n-nodes-hypeline`.
+`@hypeline-io/n8n-nodes-hypeline`.
 
 ## Nodes
 

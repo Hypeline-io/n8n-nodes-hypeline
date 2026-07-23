@@ -1,5 +1,5 @@
 {
-	"node": "n8n-nodes-hypeline.hypeline",
+	"node": "@hypeline-io/n8n-nodes-hypeline.hypeline",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Development", "Developer Tools", "Utility"],

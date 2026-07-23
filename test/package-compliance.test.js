@@ -17,8 +17,8 @@ test('declares the community-node keyword', () => {
 	assert.ok(pkg.keywords.includes('n8n-community-node-package'));
 });
 
-test('is named n8n-nodes-hypeline', () => {
-	assert.equal(pkg.name, 'n8n-nodes-hypeline');
+test('is named @hypeline-io/n8n-nodes-hypeline', () => {
+	assert.equal(pkg.name, '@hypeline-io/n8n-nodes-hypeline');
 });
 
 test('points at the public Hypeline-io repo', () => {

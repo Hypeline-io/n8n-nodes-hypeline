@@ -2,6 +2,8 @@ import {
 	NodeConnectionTypes,
 	type IDataObject,
 	type IHookFunctions,
+	type ILoadOptionsFunctions,
+	type INodePropertyOptions,
 	type INodeType,
 	type INodeTypeDescription,
 	type IWebhookFunctions,
@@ -76,11 +78,14 @@ export class HypelineTrigger implements INodeType {
 				},
 			},
 			{
-				displayName: 'Source IDs',
+				displayName: 'Source Names or IDs',
 				name: 'sourceIds',
-				type: 'string',
-				default: '',
-				description: 'Optional comma-separated source IDs to scope the new alert',
+				type: 'multiOptions',
+				typeOptions: {
+					loadOptionsMethod: 'getSources',
+				},
+				default: [],
+				description: 'The sources whose new content this alert watches. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 				displayOptions: {
 					show: {
 						alertMode: ['create'],
@@ -88,12 +93,15 @@ export class HypelineTrigger implements INodeType {
 				},
 			},
 			{
-				displayName: 'Alert ID',
+				displayName: 'Alert Name or ID',
 				name: 'alertId',
-				type: 'string',
+				type: 'options',
+				typeOptions: {
+					loadOptionsMethod: 'getAlerts',
+				},
 				default: '',
 				required: true,
-				description: 'The ID of an existing alert to attach this trigger to',
+				description: 'The existing alert to attach this trigger to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 				displayOptions: {
 					show: {
 						alertMode: ['existing'],
@@ -101,6 +109,45 @@ export class HypelineTrigger implements INodeType {
 				},
 			},
 		],
+	};
+
+	// loadOptions populates the Sources / Alert pickers by calling the API with the
+	// node's credential, so a user picks by name instead of pasting a raw id.
+	methods = {
+		loadOptions: {
+			async getSources(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = (await this.helpers.httpRequestWithAuthentication.call(this, 'hypelineApi', {
+					method: 'GET',
+					baseURL: BASE_URL,
+					url: '/v1/sources',
+					qs: { limit: 200 },
+					json: true,
+				})) as IDataObject | IDataObject[];
+				const rows = (Array.isArray(response) ? response : (response.data as IDataObject[])) ?? [];
+				return rows.map((s) => ({
+					name: (s.url as string) || (s.id as string),
+					value: s.id as string,
+				}));
+			},
+
+			async getAlerts(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = (await this.helpers.httpRequestWithAuthentication.call(this, 'hypelineApi', {
+					method: 'GET',
+					baseURL: BASE_URL,
+					url: '/v1/alerts',
+					qs: { limit: 200 },
+					json: true,
+				})) as IDataObject | IDataObject[];
+				const rows = (Array.isArray(response) ? response : (response.data as IDataObject[])) ?? [];
+				return rows.map((a) => {
+					const q = (a.filter_query as string) || '';
+					return {
+						name: q ? q : '(all content)',
+						value: a.id as string,
+					};
+				});
+			},
+		},
 	};
 
 	webhookMethods = {
@@ -129,10 +176,10 @@ export class HypelineTrigger implements INodeType {
 				let alertId: string;
 				if (alertMode === 'create') {
 					const filterQuery = this.getNodeParameter('filterQuery') as string;
-					const sourceIdsRaw = (this.getNodeParameter('sourceIds', '') as string).trim();
+					const sourceIds = this.getNodeParameter('sourceIds', []) as string[];
 					const body: IDataObject = { filter_query: filterQuery };
-					if (sourceIdsRaw) {
-						body.source_ids = sourceIdsRaw.split(',').map((s) => s.trim()).filter(Boolean);
+					if (sourceIds.length) {
+						body.source_ids = sourceIds;
 					}
 					const created = (await this.helpers.httpRequestWithAuthentication.call(this, 'hypelineApi', {
 						method: 'POST',

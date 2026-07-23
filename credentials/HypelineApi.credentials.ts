@@ -11,7 +11,7 @@ export class HypelineApi implements ICredentialType {
 
 	displayName = 'Hypeline API';
 
-	documentationUrl = 'https://hypeline.io/docs';
+	documentationUrl = 'https://docs.hypeline.io';
 
 	icon: Icon = { light: 'file:hypeline.svg', dark: 'file:hypeline.dark.svg' };
 

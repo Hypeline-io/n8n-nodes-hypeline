@@ -337,9 +337,9 @@ export class Hypeline implements INodeType {
 				name: 'filterQuery',
 				type: 'string',
 				default: '',
-				required: true,
-				placeholder: 'pricing OR "price change"',
-				description: 'The keyword or Boolean query matched against the content of changes',
+				placeholder: 'acquisition OR "series a"',
+				description:
+					'Optional keyword or Boolean query matched against each change. Leave blank to match all new content from the alert\'s sources.',
 				displayOptions: {
 					show: {
 						resource: ['alert'],
@@ -384,7 +384,8 @@ export class Hypeline implements INodeType {
 						name: 'filter_query',
 						type: 'string',
 						default: '',
-						description: 'Replace the keyword or Boolean query (update only)',
+						description:
+							'Replace the keyword or Boolean query. An empty value clears it so the alert matches all new content.',
 						routing: {
 							send: {
 								type: 'body',

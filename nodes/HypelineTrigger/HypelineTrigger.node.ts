@@ -66,9 +66,9 @@ export class HypelineTrigger implements INodeType {
 				name: 'filterQuery',
 				type: 'string',
 				default: '',
-				required: true,
-				placeholder: 'pricing OR "price change"',
-				description: 'The keyword or Boolean query matched against the content of changes',
+				placeholder: 'acquisition OR "series a"',
+				description:
+					'Optional keyword or Boolean query matched against each change. Leave blank to fire on all new content from the source.',
 				displayOptions: {
 					show: {
 						alertMode: ['create'],

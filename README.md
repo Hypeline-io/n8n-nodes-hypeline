@@ -64,9 +64,10 @@ The key is sent as an `Authorization: Bearer` header on every request.
 React to new content:
 
 1. Add a **Hypeline Trigger** node.
-2. Choose **Create New** and enter a filter query (for example `pricing OR
-   "price change"`), optionally scoped to specific source ids, or choose
-   **Attach Existing** and paste an alert id.
+2. Choose **Create New**. Leave the filter query blank to fire on all new
+   content, or narrow it with a keyword or Boolean query (for example
+   `acquisition OR "series a"`), optionally scoped to specific source ids. Or
+   choose **Attach Existing** and paste an alert id.
 3. Activate the workflow. The trigger registers itself and fires on each new
    matching change, with the event as JSON.
 
